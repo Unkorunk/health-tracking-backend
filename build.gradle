@@ -25,6 +25,7 @@ dependencies {
     compile group: 'org.jetbrains.exposed', name: 'exposed-dao', version: '0.23.1'
     compile group: 'org.jetbrains.exposed', name: 'exposed-core', version: '0.23.1'
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'org.jetbrains.exposed', name: 'exposed-jodatime', version: '0.23.1'
 }
 
 test {
