@@ -11,12 +11,19 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://dl.bintray.com/kotlin/exposed/"
+    }
 }
 
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-reflect'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.postgresql:postgresql"
+    runtime group: 'org.jetbrains.exposed', name: 'exposed-jdbc', version: '0.23.1'
+    compile group: 'org.jetbrains.exposed', name: 'exposed-dao', version: '0.23.1'
+    compile group: 'org.jetbrains.exposed', name: 'exposed-core', version: '0.23.1'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
