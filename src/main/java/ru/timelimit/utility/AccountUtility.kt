@@ -4,21 +4,22 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
-import ru.timelimit.example.HelloWorldController
+import ru.timelimit.account.Users
+
 
 class AccountUtility {
     companion object {
         fun getUserByToken(token: String) : ResultRow? {
             var resultRow: ResultRow? = null
             transaction {
-                val result = HelloWorldController.Users.select { HelloWorldController.Users.token eq token }
+                val result = Users.select { Users.token eq token }
 
                 if (result.empty()) {
                     return@transaction
                 }
 
                 result.forEach {
-                    val expiresIn = it.getOrNull(HelloWorldController.Users.expires_in)
+                    val expiresIn = it.getOrNull(Users.expires_in)
                     if (expiresIn != null && expiresIn >= DateTime.now()) {
                         resultRow = it
                         return@transaction
@@ -35,14 +36,14 @@ class AccountUtility {
         fun getUserById(id: Int) : ResultRow? {
             var resultRow: ResultRow? = null
             transaction {
-                val result = HelloWorldController.Users.select { HelloWorldController.Users.id eq id }
+                val result = Users.select {Users.id eq id }
 
                 if (result.empty()) {
                     return@transaction
                 }
 
                 result.forEach {
-                    val expiresIn = it.getOrNull(HelloWorldController.Users.expires_in)
+                    val expiresIn = it.getOrNull(Users.expires_in)
                     if (expiresIn != null && expiresIn >= DateTime.now()) {
                         resultRow = it
                         return@transaction

@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import ru.timelimit.example.HelloWorldController
+import ru.timelimit.account.Users
 import ru.timelimit.utility.AccountUtility
 
 @RestController
@@ -33,7 +33,7 @@ class FeedController {
         var status = false
         transaction {
             Feed.insert {
-                it[Feed.author_id] = user[HelloWorldController.Users.id]
+                it[Feed.author_id] = user[Users.id]
                 it[Feed.title] = title
                 it[Feed.description] = description
                 it[Feed.publication_time] = DateTime.now()
@@ -54,7 +54,7 @@ class FeedController {
                 val author = AccountUtility.getUserById(it[Feed.author_id])
                 if (author != null) {
                     val authorName =
-                        author[HelloWorldController.Users.firstName] + " " + author[HelloWorldController.Users.lastName]
+                        author[Users.firstName] + " " + author[Users.lastName]
                     posts.add(Post(authorName, it[Feed.title], it[Feed.description], it[Feed.publication_time].toString()))
                 }
             }
