@@ -3,6 +3,7 @@ package ru.timelimit.example
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.web.bind.annotation.RequestMapping
@@ -28,6 +29,8 @@ class HelloWorldController {
         val role = integer("role")
         val firstName = varchar("firstName", 64)
         val lastName = varchar("lastName", 64)
+        val token = varchar("token", 128)
+        val expires_in = datetime("expires_in")
     }
 
     @RequestMapping("/example/HelloWorld")
