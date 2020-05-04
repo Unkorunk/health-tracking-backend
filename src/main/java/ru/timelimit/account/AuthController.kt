@@ -69,12 +69,17 @@ internal class AuthController {
             addLogger ( StdOutSqlLogger )
 
             val req = Users.select { Users.username eq login }
-
+            
             if (req.count() == 1L && req.single()[Users.password] == password) {
-                randomString = (1..128)
-                    .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
-                    .map(charPool::get)
-                    .joinToString("")
+                var uniq: Long
+                do {
+                    randomString = (1..128)
+                            .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+                            .map(charPool::get)
+                            .joinToString("")
+                    uniq = Users.select{ Users.token eq randomString }.count();
+                } while ( uniq != 0L)
+                
                 dateTime = DateTime.now().plusMinutes(10)
 
                 Users.update ({ Users.username eq login }) {
