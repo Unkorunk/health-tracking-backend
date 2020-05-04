@@ -29,7 +29,8 @@ internal class AuthController {
     private val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
     @RequestMapping("/account/registration")
-    fun registration(@RequestParam("login") login: String, @RequestParam("password") password: String,
+    fun registration(@RequestParam("login") login: String,
+                     @RequestParam("password") password: String,
                      @RequestParam("role") role: Int,
                      @RequestParam("firstName") firstName: String,
                      @RequestParam("lastName") lastName: String): RegistrationResult {
@@ -76,7 +77,7 @@ internal class AuthController {
                     uniq = Users.select{ Users.token eq randomString }.count();
                 } while ( uniq != 0L)
                 
-                dateTime = DateTime.now().plusMinutes(10)
+                dateTime = DateTime.now().plusMonths(1)
 
                 Users.update ({ Users.username eq login }) {
                     it[Users.token] = randomString
