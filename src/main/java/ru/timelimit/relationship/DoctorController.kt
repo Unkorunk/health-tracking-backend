@@ -26,7 +26,7 @@ class DoctorController {
     @RequestMapping("doctor/listPatients")
     fun listPatients(@RequestParam("token") token: String) : ListPatientsResult {
         val doctorProfile = AccountUtility.getUserByToken(token) ?: return ListPatientsResult(false)
-        if (doctorProfile[Users.role] != 1) return ListPatientsResult(false)
+        if (!doctorProfile[Users.role]) return ListPatientsResult(false)
 
         val listPatients = mutableListOf<PatientResult>()
         transaction {
@@ -46,7 +46,7 @@ class DoctorController {
     @RequestMapping("doctor/listSuggestions")
     fun listSuggestions(@RequestParam("token") token: String) : ListPatientsResult {
         val doctorProfile = AccountUtility.getUserByToken(token) ?: return ListPatientsResult(false)
-        if (doctorProfile[Users.role] != 1) return ListPatientsResult(false)
+        if (!doctorProfile[Users.role]) return ListPatientsResult(false)
 
         val listPatients = mutableListOf<PatientResult>()
         transaction {
@@ -66,7 +66,7 @@ class DoctorController {
     @RequestMapping("doctor/applySuggestion")
     fun applySuggestion(@RequestParam("patientId") patientId: Int, @RequestParam("token") token: String) : Map<String, Boolean> {
         val doctorProfile = AccountUtility.getUserByToken(token) ?: return mapOf(Pair("status", false))
-        if (doctorProfile[Users.role] != 1) return mapOf(Pair("status", false))
+        if (!doctorProfile[Users.role]) return mapOf(Pair("status", false))
 
         var status = false
         transaction {

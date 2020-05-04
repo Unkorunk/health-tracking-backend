@@ -32,10 +32,10 @@ class FeedController {
             @RequestParam("description") description: String,
             @RequestParam("token") token: String) : Map<String, Boolean> {
         val doctorProfile = AccountUtility.getUserByToken(token) ?: return mapOf(Pair("status", false))
-        if (doctorProfile[Users.role] != 1) return mapOf(Pair("status", false))
+        if (!doctorProfile[Users.role]) return mapOf(Pair("status", false))
 
         val patientProfile = AccountUtility.getUserById(patientId) ?: return mapOf(Pair("status", false))
-        if (patientProfile[Users.role] == 1) return mapOf(Pair("status", false))
+        if (patientProfile[Users.role]) return mapOf(Pair("status", false))
 
         var status = false
         transaction {
@@ -64,7 +64,7 @@ class FeedController {
     @RequestMapping("feed/get")
     fun get(@RequestParam("token") token: String) : FeedResult {
         val patientProfile = AccountUtility.getUserByToken(token) ?: return FeedResult(false)
-        if (patientProfile[Users.role] == 1) return FeedResult(false)
+        if (patientProfile[Users.role]) return FeedResult(false)
 
         val posts = mutableListOf<Post>()
         transaction {

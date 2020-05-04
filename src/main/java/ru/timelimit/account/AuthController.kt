@@ -22,6 +22,7 @@ internal class AuthController {
 
     data class LoginResult(
         val status: Boolean,
+        val role: Boolean,
         val token: String,
         val expires_in: String
     )
@@ -31,7 +32,7 @@ internal class AuthController {
     @RequestMapping("/account/registration")
     fun registration(@RequestParam("login") login: String,
                      @RequestParam("password") password: String,
-                     @RequestParam("role") role: Int,
+                     @RequestParam("role") role: Boolean,
                      @RequestParam("firstName") firstName: String,
                      @RequestParam("lastName") lastName: String): RegistrationResult {
         var status = false
@@ -41,7 +42,7 @@ internal class AuthController {
 
             val req = Users.select { Users.username eq login }
             if (req.count() == 0L) {
-                val stPeteId =  Users.insert {
+                Users.insert {
                     it [username] = login
                     it [Users.password] = password
                     it [Users.role] = role
@@ -62,16 +63,19 @@ internal class AuthController {
 
         var randomString: String = ""
         var dateTime: DateTime = DateTime.now()
+        var role = false
         transaction {
             addLogger ( StdOutSqlLogger )
 
             val req = Users.select { Users.username eq login }
             
             if (req.count() == 1L && req.single()[Users.password] == password) {
+                role = req.single()[Users.role]
+
                 var uniq: Long
                 do {
                     randomString = (1..128)
-                            .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+                            .map { kotlin.random.Random.nextInt(0, charPool.size) }
                             .map(charPool::get)
                             .joinToString("")
                     uniq = Users.select{ Users.token eq randomString }.count();
@@ -88,7 +92,7 @@ internal class AuthController {
             }
         }
 
-        return LoginResult(status, randomString, dateTime.toString() )
+        return LoginResult(status, role, randomString, dateTime.toString() )
     }
 
 }
