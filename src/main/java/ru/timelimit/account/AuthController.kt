@@ -32,10 +32,7 @@ internal class AuthController {
     fun registration(@RequestParam("login") login: String, @RequestParam("password") password: String,
                      @RequestParam("role") role: Int,
                      @RequestParam("firstName") firstName: String,
-                     @RequestParam("lastName") lastName: String,
-                     @RequestParam("token", defaultValue = "no") token: String,
-                     @RequestParam("expires_in", defaultValue = "no") expires_in: String): RegistrationResult {
-
+                     @RequestParam("lastName") lastName: String): RegistrationResult {
         var status = false
 
         transaction {
@@ -49,7 +46,6 @@ internal class AuthController {
                     it [Users.role] = role
                     it [Users.firstName] = firstName
                     it [Users.lastName] = lastName
-                    it [Users.token] = token
                 }
                 status = true
             }
